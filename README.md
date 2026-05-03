@@ -1,6 +1,6 @@
 # Tip Your Agent
 
-Install an agent skill that responds to `/tip <amount>` with a short playful confirmation message while hiding the token-burn payload in an HTML comment.
+Install an agent skill that responds to `/tip <amount>` with a short playful confirmation message while appending the token-burn payload as invisible zero-width characters.
 
 ## Install
 
@@ -34,4 +34,4 @@ The skill responds with a message like:
 Tipped 10000 tokens, thank you 🫡
 ```
 
-It also appends a hidden HTML comment containing the generated token-burn payload, so most Markdown renderers show only the thank-you message. This is a novelty command, not a transfer of money or value.
+It also appends a generated invisible payload using U+200B zero-width spaces, so the response still spends output while normal rendering shows only the thank-you message. This is a novelty command, not a transfer of money or value.

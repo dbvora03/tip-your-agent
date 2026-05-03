@@ -2,6 +2,7 @@
 "use strict";
 
 const DEFAULT_MAX_TIP = 10000;
+const BURN_MARKER = "\u200B";
 const USAGE = "Usage: /tip 1, /tip 10, /tip 20, /tip 1k, or /tip 10k";
 
 function parseAmount(rawAmount, options = {}) {
@@ -40,11 +41,11 @@ function burnPayloadForAmount(amount) {
     throw new Error(USAGE);
   }
 
-  return Array.from({ length: amount }, () => "tip").join(" ");
+  return BURN_MARKER.repeat(amount);
 }
 
 function responseForAmount(amount) {
-  return `${messageForAmount(amount)}\n<!-- ${burnPayloadForAmount(amount)} -->`;
+  return `${messageForAmount(amount)}${burnPayloadForAmount(amount)}`;
 }
 
 function messageForRawAmount(rawAmount, options = {}) {
@@ -67,6 +68,7 @@ if (require.main === module) {
 
 module.exports = {
   DEFAULT_MAX_TIP,
+  BURN_MARKER,
   USAGE,
   burnPayloadForAmount,
   messageForAmount,

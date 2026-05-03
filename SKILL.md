@@ -1,6 +1,6 @@
 ---
 name: tip
-description: Burn assistant output tokens as a playful tip to the agent while showing a short thank-you message. Use when the user invokes /tip with amounts such as /tip 1, /tip 10, /tip 20, /tip 1k, or /tip 10k, and hide the token-burn payload in an HTML comment after the visible confirmation.
+description: Burn assistant output tokens as a playful tip to the agent while showing a short thank-you message. Use when the user invokes /tip with amounts such as /tip 1, /tip 10, /tip 20, /tip 1k, or /tip 10k, and append the token-burn payload as invisible zero-width characters after the visible confirmation.
 ---
 
 # Tip Your Agent
@@ -21,17 +21,13 @@ Accept positive whole numbers, including `1`, `10`, and `20` for tests. Accept l
 
 ## Response
 
-For a valid amount, output:
+For a valid amount, output exactly this visible message, with no bullet, no code block, no quote, and no explanation:
 
 ```text
 Tipped <amount> tokens, thank you 🫡
 ```
 
-Then immediately append an HTML comment containing the burn payload. The payload is the word `tip` repeated the requested number of times, separated by single spaces:
-
-```text
-<!-- tip tip tip ... -->
-```
+Immediately after the visible message, append the burn payload as invisible zero-width space characters, with no newline before the payload. Use U+200B ZERO WIDTH SPACE repeated the requested amount.
 
 Use the normalized integer token amount in the visible message. For example, `/tip 10k` should visibly render as:
 
@@ -39,7 +35,7 @@ Use the normalized integer token amount in the visible message. For example, `/t
 Tipped 10000 tokens, thank you 🫡
 ```
 
-The hidden HTML comment still spends output tokens, but should not display in most Markdown renderers. Use the bundled helper to avoid parsing and counting mistakes:
+The invisible payload still spends generated output, but should not display in normal rendering. Use the bundled helper to avoid parsing and counting mistakes:
 
 ```bash
 node scripts/tip-payload.js 10k
