@@ -27,7 +27,15 @@ function parseAmount(rawAmount, options = {}) {
   return amount;
 }
 
-function payloadForAmount(amount) {
+function messageForAmount(amount) {
+  if (!Number.isInteger(amount) || amount < 1) {
+    throw new Error(USAGE);
+  }
+
+  return `Tipped ${amount} tokens, thank you 🫡`;
+}
+
+function burnPayloadForAmount(amount) {
   if (!Number.isInteger(amount) || amount < 1) {
     throw new Error(USAGE);
   }
@@ -35,13 +43,21 @@ function payloadForAmount(amount) {
   return Array.from({ length: amount }, () => "tip").join(" ");
 }
 
-function payloadForRawAmount(rawAmount, options = {}) {
-  return payloadForAmount(parseAmount(rawAmount, options));
+function responseForAmount(amount) {
+  return `${messageForAmount(amount)}\n<!-- ${burnPayloadForAmount(amount)} -->`;
+}
+
+function messageForRawAmount(rawAmount, options = {}) {
+  return messageForAmount(parseAmount(rawAmount, options));
+}
+
+function responseForRawAmount(rawAmount, options = {}) {
+  return responseForAmount(parseAmount(rawAmount, options));
 }
 
 if (require.main === module) {
   try {
-    process.stdout.write(payloadForRawAmount(process.argv[2]));
+    process.stdout.write(responseForRawAmount(process.argv[2]));
     process.stdout.write("\n");
   } catch (error) {
     process.stderr.write(`${error.message}\n`);
@@ -52,7 +68,10 @@ if (require.main === module) {
 module.exports = {
   DEFAULT_MAX_TIP,
   USAGE,
+  burnPayloadForAmount,
+  messageForAmount,
+  messageForRawAmount,
   parseAmount,
-  payloadForAmount,
-  payloadForRawAmount,
+  responseForAmount,
+  responseForRawAmount,
 };

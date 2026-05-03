@@ -1,6 +1,6 @@
 # Tip Your Agent
 
-Install an agent skill that responds to `/tip <amount>` by burning roughly that many assistant output tokens.
+Install an agent skill that responds to `/tip <amount>` with a short playful confirmation message while hiding the token-burn payload in an HTML comment.
 
 ## Install
 
@@ -28,4 +28,10 @@ Replace `<owner>` with the GitHub user or org that owns the repo.
 /tip 10k
 ```
 
-The skill emits a payload made from repeated `tip` markers. It is a novelty token burn, not a transfer of money or value.
+The skill responds with a message like:
+
+```text
+Tipped 10000 tokens, thank you 🫡
+```
+
+It also appends a hidden HTML comment containing the generated token-burn payload, so most Markdown renderers show only the thank-you message. This is a novelty command, not a transfer of money or value.
